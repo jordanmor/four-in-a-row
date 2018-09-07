@@ -47,9 +47,66 @@ class Game {
     if(targetSpace !== null) {
       this.ready = false;
       activeToken.drop(targetSpace, this.reset);
+      targetSpace.mark(activeToken);
+      this.checkForWin(targetSpace);
     }
   }
   reset() {
     console.log('Reset');
+  }
+  checkForWin(currentSpace) {
+    const { spaces, columns, rows } = this.board;
+    const { owner } = currentSpace.token;
+    let win = false;
+    
+    // vertical
+    for (let x = 0; x < columns; x++ ){
+        for (let y = 0; y < rows - 3; y++){
+            if (spaces[x][y].owner === owner && 
+                spaces[x][y+1].owner === owner && 
+                spaces[x][y+2].owner === owner && 
+                spaces[x][y+3].owner === owner) {
+                    win = true;
+            }           
+        }
+    }
+
+    // horizontal
+    for (let x = 0; x < columns - 3; x++ ){
+        for (let y = 0; y < rows; y++){
+            if (spaces[x][y].owner === owner && 
+                spaces[x+1][y].owner === owner && 
+                spaces[x+2][y].owner === owner && 
+                spaces[x+3][y].owner === owner) {
+                    win = true;
+            }           
+        }
+    }
+
+    // diagonal
+    for (let x = 3; x < columns; x++ ){
+        for (let y = 0; y < rows - 3; y++){
+            if (spaces[x][y].owner === owner && 
+                spaces[x-1][y+1].owner === owner && 
+                spaces[x-2][y+2].owner === owner && 
+                spaces[x-3][y+3].owner === owner) {
+                    win = true;
+            }           
+        }
+    }
+
+    // diagonal
+    for (let x = 3; x < columns; x++ ){
+        for (let y = 3; y < rows; y++){
+            if (spaces[x][y].owner === owner && 
+                spaces[x-1][y-1].owner === owner && 
+                spaces[x-2][y-2].owner === owner && 
+                spaces[x-3][y-3].owner === owner) {
+                    win = true;
+            }           
+        }
+    }
+
+    return win;
   }
 }

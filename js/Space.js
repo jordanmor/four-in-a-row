@@ -7,6 +7,9 @@ class Space {
     this.diameter = 76;
     this.radius = this.diameter / 2;
   }
+  get owner() {
+    return this.token === null ? null : this.token.owner;
+  }
   drawSVGSpace() {
     const svgSpace = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     svgSpace.setAttributeNS(null, "id", this.id);
@@ -16,5 +19,8 @@ class Space {
     svgSpace.setAttributeNS(null, "fill", "black");
     svgSpace.setAttributeNS(null, "stroke", "none");
     $('#mask').append(svgSpace);  
+  }
+  mark(token) {
+    this.token = token;
   }
 }
