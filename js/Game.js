@@ -46,14 +46,15 @@ class Game {
     
     if(targetSpace !== null) {
       this.ready = false;
-      activeToken.drop(targetSpace, this.reset);
-      targetSpace.mark(activeToken);
-      this.checkForWin(targetSpace);
+      activeToken.drop(targetSpace, 
+        () => this.updateGameState(activeToken, targetSpace));
     }
   }
-  reset() {
-    console.log('Reset');
+
+  switchPlayers() {
+    this.players.forEach(player => player.active = !player.active);
   }
+
   checkForWin(currentSpace) {
     const { spaces, columns, rows } = this.board;
     const { owner } = currentSpace.token;
@@ -108,5 +109,27 @@ class Game {
     }
 
     return win;
+  }
+
+  gameOver(message) {
+    $('#game-over').css('display', 'block').text(message);
+  }
+
+  updateGameState(token, target) {
+    target.mark(token);
+
+    if (!this.checkForWin(target) ) {
+
+      this.switchPlayers();
+
+      if (this.activePlayer.checkTokens()) {
+        this.activePlayer.activeToken.drawHTMLToken();
+        this.ready = true;
+      } else {
+        this.gameOver('No more tokens');
+      }
+    } else {
+      this.gameOver(`${target.owner.name} wins!`);
+    }
   }
 }

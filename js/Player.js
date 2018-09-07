@@ -19,4 +19,7 @@ class Player {
     }
     return tokens;
   }
+  checkTokens() {
+    return this.unusedTokens;
+  }
 }
