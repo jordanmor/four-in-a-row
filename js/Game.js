@@ -17,4 +17,39 @@ class Game {
     this.activePlayer.activeToken.drawHTMLToken();
     this.ready = true;
   }
+  handleKeyDown(e) {
+    if (this.ready) {
+      switch (e.key) {
+        case 'ArrowDown':
+          this.playToken();
+          break;
+        case 'ArrowLeft':
+          this.activePlayer.activeToken.moveLeft();
+          break;
+        case 'ArrowRight':
+          this.activePlayer.activeToken.moveRight(this.board.columns);
+          break;
+      }
+    }
+  }
+  playToken() {
+    const { spaces } = this.board;
+    const { activeToken } = this.activePlayer;
+    const targetColumn = spaces[activeToken.columnLocation];
+    let targetSpace = null;
+
+    for (let space of targetColumn) {
+      if (space.token === null) {
+        targetSpace = space;
+      }
+    }
+    
+    if(targetSpace !== null) {
+      this.ready = false;
+      activeToken.drop(targetSpace, this.reset);
+    }
+  }
+  reset() {
+    console.log('Reset');
+  }
 }
